@@ -2,6 +2,7 @@ package me.potato.demokubespring;
 
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -14,20 +15,26 @@ public class SampleService {
         this.samples = samples;
     }
 
-    public Optional<Sample> getSample(Long id){
+    public Optional<Sample> get(Long id){
         return samples.findById(id);
     }
 
-    public Collection<Sample> getAllSamples(){
+    public Collection<Sample> getAll(){
         return samples.findAll();
     }
 
-    public Optional<Sample> updateSample(Sample newSample){
+    public Optional<Sample> update(Sample newSample){
         Sample save = samples.save(newSample);
 
         if(save != null)
             return Optional.of(save);
 
         return Optional.empty();
+    }
+
+    @Transactional
+    public Boolean delete(Long id){
+        samples.deleteById(id);
+        return samples.findById(id).isEmpty();
     }
 }
